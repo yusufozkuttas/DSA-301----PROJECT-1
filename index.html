@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Turkey Census Population</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    h2 {
+      margin-bottom: 10px;
+    }
+
+    .line {
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .axis path,
+    .axis line {
+      stroke: black;
+    }
+
+    .label {
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Population Trends of Selected Turkish Cities (1927–2024)</h2>
+
+<svg width="900" height="520"></svg>
+
+<script>
+const data = [
+  { year: 2024, Van: 1118087, Mugla: 1081867, Adana: 2280484, Ankara: 5864049, Istanbul: 15701602, Izmir: 4493242 },
+  { year: 2023, Van: 1127612, Mugla: 1066736, Adana: 2270298, Ankara: 5803482, Istanbul: 15655924, Izmir: 4479525 },
+  { year: 2022, Van: 1128749, Mugla: 1048185, Adana: 2274106, Ankara: 5782285, Istanbul: 15907951, Izmir: 4462056 },
+  { year: 2021, Van: 1141015, Mugla: 1021141, Adana: 2263373, Ankara: 5747325, Istanbul: 15840900, Izmir: 4425789 },
+  { year: 2020, Van: 1149342, Mugla: 1000773, Adana: 2258718, Ankara: 5663322, Istanbul: 15462452, Izmir: 4394694 },
+  { year: 2019, Van: 1137272, Mugla: 983142, Adana: 2237940, Ankara: 5639076, Istanbul: 15519267, Izmir: 4367251 },
+  { year: 2018, Van: 1129773, Mugla: 967487, Adana: 2220125, Ankara: 5503985, Istanbul: 15067724, Izmir: 4320519 },
+  { year: 2017, Van: 1100190, Mugla: 938751, Adana: 2201670, Ankara: 5445026, Istanbul: 15029231, Izmir: 4279677 },
+  { year: 2016, Van: 1100190, Mugla: 923773, Adana: 2195721, Ankara: 5346518, Istanbul: 14804116, Izmir: 4223200 },
+  { year: 2015, Van: 1096397, Mugla: 908877, Adana: 2183167, Ankara: 5270575, Istanbul: 14657434, Izmir: 4168415 },
+  { year: 2014, Van: 1084903, Mugla: 894509, Adana: 2165595, Ankara: 5150072, Istanbul: 14377018, Izmir: 4119696 },
+  { year: 2013, Van: 1071971, Mugla: 866665, Adana: 2149260, Ankara: 5045083, Istanbul: 14160467, Izmir: 4066484 },
+  { year: 2012, Van: 1053225, Mugla: 851145, Adana: 2125635, Ankara: 4965542, Istanbul: 13854740, Izmir: 4010487 },
+  { year: 2011, Van: 1022254, Mugla: 838324, Adana: 2108000, Ankara: 4890769, Istanbul: 13624240, Izmir: 3965400 },
+  { year: 2010, Van: 979671, Mugla: 802381, Adana: 2086337, Ankara: 4771716, Istanbul: 13018735, Izmir: 3941393 },
+  { year: 2009, Van: 1022199, Mugla: 791424, Adana: 2059193, Ankara: 4658902, Istanbul: 12915158, Izmir: 3868679 },
+  { year: 2008, Van: 1004586, Mugla: 791424, Adana: 2008338, Ankara: 4466756, Istanbul: 12469741, Izmir: 3739412 },
+  { year: 2007, Van: 979671, Mugla: 791424, Adana: 2008338, Ankara: 4466756, Istanbul: 12057361, Izmir: 3739412 },
+  { year: 2000, Van: 877524, Mugla: 715328, Adana: 1849916, Ankara: 4007860, Istanbul: 10018735, Izmir: 3378685 },
+  { year: 1990, Van: 637433, Mugla: 562809, Adana: 1726106, Ankara: 3236626, Istanbul: 7309190, Izmir: 2694204 },
+  { year: 1985, Van: 547216, Mugla: 490924, Adana: 1501421, Ankara: 2236755, Istanbul: 5475100, Izmir: 2147727 },
+  { year: 1980, Van: 468646, Mugla: 438702, Adana: 1225295, Ankara: 1854694, Istanbul: 4741347, Izmir: 1644952 },
+  { year: 1975, Van: 386314, Mugla: 400796, Adana: 1240475, Ankara: 2585293, Istanbul: 3904588, Izmir: 1673966 },
+  { year: 1970, Van: 325763, Mugla: 368776, Adana: 1035377, Ankara: 2041658, Istanbul: 3019032, Izmir: 1427173 },
+  { year: 1965, Van: 266840, Mugla: 334973, Adana: 902712, Ankara: 1644302, Istanbul: 2293823, Izmir: 1234667 },
+  { year: 1960, Van: 211034, Mugla: 299611, Adana: 760803, Ankara: 1321380, Istanbul: 1882092, Izmir: 1063490 },
+  { year: 1955, Van: 175250, Mugla: 267579, Adana: 628505, Ankara: 1120864, Istanbul: 1533822, Izmir: 910496 },
+  { year: 1950, Van: 145944, Mugla: 241640, Adana: 508518, Ankara: 819693, Istanbul: 1166477, Izmir: 768411 },
+  { year: 1945, Van: 127858, Mugla: 220678, Adana: 418740, Ankara: 695526, Istanbul: 1078399, Izmir: 673581 },
+  { year: 1940, Van: 112975, Mugla: 211445, Adana: 375777, Ankara: 602965, Istanbul: 991237, Izmir: 640107 },
+  { year: 1935, Van: 143434, Mugla: 196772, Adana: 383645, Ankara: 534025, Istanbul: 883599, Izmir: 596850 },
+  { year: 1927, Van: 75329, Mugla: 175390, Adana: 227718, Ankara: 404720, Istanbul: 794444, Izmir: 526005 }
+];
+
+data.sort((a, b) => a.year - b.year);
+
+const cities = ["Van", "Mugla", "Adana", "Ankara", "Istanbul", "Izmir"];
+
+const svg = d3.select("svg"),
+      margin = { top: 20, right: 120, bottom: 40, left: 80 },
+      width = +svg.attr("width") - margin.left - margin.right,
+      height = +svg.attr("height") - margin.top - margin.bottom;
+
+const g = svg.append("g")
+    .attr("transform", `translate(${margin.left},${margin.top})`);
+
+const x = d3.scaleLinear()
+    .domain(d3.extent(data, d => d.year))
+    .range([0, width]);
+
+const y = d3.scaleLinear()
+    .domain([0, d3.max(data, d => d3.max(cities, city => d[city]))])
+    .range([height, 0]);
+
+const color = d3.scaleOrdinal()
+    .domain(cities)
+    .range(d3.schemeCategory10);
+
+g.append("g")
+    .attr("class", "axis")
+    .attr("transform", `translate(0,${height})`)
+    .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+
+g.append("g")
+    .attr("class", "axis")
+    .call(d3.axisLeft(y));
+
+const line = d3.line()
+    .x(d => x(d.year))
+    .y(d => y(d.value));
+
+cities.forEach(city => {
+    const cityData = data.map(d => ({ year: d.year, value: d[city] }));
+
+    g.append("path")
+        .datum(cityData)
+        .attr("class", "line")
+        .attr("stroke", color(city))
+        .attr("d", line);
+
+    const lastPoint = cityData[cityData.length - 1];
+
+    g.append("text")
+        .attr("class", "label")
+        .attr("x", x(lastPoint.year) + 8)
+        .attr("y", y(lastPoint.value))
+        .attr("fill", color(city))
+        .text(city);
+});
+
+g.append("text")
+    .attr("x", width / 2)
+    .attr("y", height + 35)
+    .attr("text-anchor", "middle")
+    .text("Year");
+
+g.append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("x", -height / 2)
+    .attr("y", -60)
+    .attr("text-anchor", "middle")
+    .text("Population");
+</script>
+
+</body>
+</html>
