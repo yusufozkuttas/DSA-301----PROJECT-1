@@ -1,13 +1,9 @@
-# DSA 301 Project 1
+# DSA 301 Project 1 
 
-This project presents a multi-line chart visualization of population changes in selected Turkish cities using D3.js.
+This project implements a multi-line chart using D3.js to visualize population trends of Turkish cities from 1927 to 2024.
 
-## Visualization
-Each line represents a city, showing how population evolves over time (1927–2024).
+Each line represents a city, allowing comparison of long-term demographic changes.
 
-## Technologies
-- HTML
-- JavaScript (D3.js)
-
-
+## Live Visualization
+https://yusufozkuttas.github.io/DSA-301----PROJECT-1/
 
